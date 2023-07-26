@@ -1,0 +1,2608 @@
+<!-- saved from url=(0022) -->
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Required meta tags -->
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+
+	<title>Audio Visual Speech Separation in Noisy Environments with a Biologically-Inspired Model</title>
+	<style type="text/css">
+		table {
+			width: 100%;
+			table-layout: fixed;
+		}
+
+		audio {
+			width: 100%;
+		}
+
+		thead>tr>th:first-child {
+			width: 96px;
+		}
+
+		@media (max-width: 767px) {
+			.big-screen {
+				display: none;
+			}
+		}
+
+		@media (min-width: 767px) {
+			.small-screen {
+				display: none;
+			}
+		}
+	</style>
+</head>
+
+<body data-gr-c-s-loaded="true">
+	<header class="header">
+		<div class="jumbotron bg-dark text-center">
+			<div class="container ">
+				<div class="row align-items-center">
+					<div class="col-md-12">
+
+						<h2>
+							<a class="text-light">Audio Visual Speech Separation in Noisy Environments <br> with a
+								Lightweight Iterative Model</a>
+						</h2>
+
+						<br>
+
+						<!-- <div class="row">
+							<div class="col-md col-sm-12">
+								<h3>
+									<a class="text-light">(Audio samples)</a>
+								</h3>
+							</div>
+						</div> -->
+
+						<div class="row">
+							<div class="col-md col-sm-12 text-light">
+								<a class="text-light" href="https://www.linkedin.com/in/hmartelb/" target="_blank">Héctor Martel<sup>1,2</sup></a>
+							</div>
+							<div class="col-md col-sm-12 text-light">
+								Julius Richter<sup>2</sup>
+							</div>
+							<div class="col-md col-sm-12 text-light">
+								Kai Li<sup>1</sup>
+							</div>
+							<div class="col-md col-sm-12 text-light">
+								Xiaolin Hu<sup>1,*</sup>
+							</div>
+							<div class="col-md col-sm-12 text-light">
+								Timo Gerkmann<sup>2,*</sup>
+							</div>
+						</div>
+
+						<br>
+
+						<div class="">
+							<div class="col-md col-sm-12 text-light">
+								1. Department of Computer Science and Technology, Tsinghua University, Beijing, China
+							</div>
+							<div class="col-md col-sm-12 text-light">
+								2. Signal Processing (SP), Department of Informatics, Universität Hamburg, Hamburg,
+								Germany
+							</div>
+							<div class="col-md col-sm-12 text-light">
+								3. Chinese Institute for Brain Research (CIBR), Beijing, China
+							</div>
+							<div class="col-md col-sm-12 text-light">
+								*Corresponding Author
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		</div>
+
+	</header>
+
+	<div class="container">
+		<!-- <div class="row" id="result">
+			<div class="col-md-12">
+				<h2>Materials</h2>
+				<hr>
+				<p>
+					[Code]
+				</p>
+			</div>
+		</div> -->
+	
+
+		<div class="row" id="result">
+			<div class="col-md-12">
+				<h2>Sample results on LRS3+WHAM!</h2>
+				<hr>
+				<p>
+					We generated synthetic mixtures containing 2 speakers plus noise by combining the LRS3 [<a
+						class="text-success" href="#1">1</a>] and WHAM! [<a class="text-success" href="#2">2</a>]
+					datasets.
+					The Signal-to-Noise Ratio is uniformly sampled within the range [-5, 5] dB for clean speech and [-6,
+					3] dB for the noise, following the mixing procedure originally described in WHAM!.
+					<br>
+					The following table shows the results for 10 randomly selected examples from the test set.
+				</p>
+				<table class="table table-responsive">
+					<thead class="w-100">
+						<tr style="border-top:1px solid black" class="text-center">
+
+
+
+							<th style="width: 180px;">Video ground truth</th>
+
+
+
+
+
+							<th style="width: 180px;">Input mixture</th>
+
+
+
+
+
+							<th style="width: 180px;">
+								ConvTasNet
+								<sup>
+									<a class="text-success" href="#3">3</a>
+								</sup>
+							</th>
+
+
+
+
+
+							<th style="width: 180px;">
+								DPRNN
+								<sup>
+									<a class="text-success" href="#4">4</a>
+								</sup>
+							</th>
+
+
+
+
+
+							<th style="width: 180px;">
+								AVConvTasNet
+								<sup>
+									<a class="text-success" href="#5">5</a>
+								</sup>
+							</th>
+
+
+
+
+
+							<th style="width: 180px;">
+								LAVSE
+								<sup>
+									<a class="text-success" href="#6">6</a>
+								</sup>
+							</th>
+
+
+
+
+
+							<th style="width: 180px;">
+								L2L
+								<sup>
+									<a class="text-success" href="#7">7</a>
+								</sup>
+							</th>
+
+
+
+
+
+							<th style="width: 180px;">
+								A-FRCNN-8
+								<sup>
+									<a class="text-success" href="#8">8</a>
+								</sup>
+							</th>
+
+
+
+
+
+							<th style="width: 180px;">AVLIT-8 (Ours)</th>
+
+
+
+						</tr>
+					</thead>
+
+					<tbody class="w-100">
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/00/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/00/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/00/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/00/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/00/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/00/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/00/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/00/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/00/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/00/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/00/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/00/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/00/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/00/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/00/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/00/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/00/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/01/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/01/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/01/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/01/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/01/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/01/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/01/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/01/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/01/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/01/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/01/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/01/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/01/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/01/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/01/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/01/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/01/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/02/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/02/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/02/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/02/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/02/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/02/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/02/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/02/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/02/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/02/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/02/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/02/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/02/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/02/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/02/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/02/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/02/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/03/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/03/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/03/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/03/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/03/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/03/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/03/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/03/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/03/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/03/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/03/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/03/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/03/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/03/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/03/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/03/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/03/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/04/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/04/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/04/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/04/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/04/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/04/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/04/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/04/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/04/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/04/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/04/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/04/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/04/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/04/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/04/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/04/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/04/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/05/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/05/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/05/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/05/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/05/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/05/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/05/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/05/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/05/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/05/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/05/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/05/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/05/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/05/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/05/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/05/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/05/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/06/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/06/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/06/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/06/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/06/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/06/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/06/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/06/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/06/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/06/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/06/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/06/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/06/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/06/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/06/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/06/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/06/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/07/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/07/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/07/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/07/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/07/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/07/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/07/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/07/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/07/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/07/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/07/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/07/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/07/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/07/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/07/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/07/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/07/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/08/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/08/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/08/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/08/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/08/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/08/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/08/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/08/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/08/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/08/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/08/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/08/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/08/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/08/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/08/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/08/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/08/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+						<tr style="border-top:1px solid black">
+
+
+
+
+
+							<td style="width: 360px; display: flex;">
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/09/s1.mp4" type="video/mp4">
+								</video>
+
+
+								<!-- Video examples -->
+
+								<video controls="" style="width: 170px; margin-right: 10px;">
+									<source src="./samples/00_Video ground truth/09/s2.mp4" type="video/mp4">
+								</video>
+
+
+							</td>
+
+
+
+
+							<td style="width: 180px;">
+								<!-- Input mixture -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/01_Input mixture/09/mix_noise.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- ConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/09/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/02_ConvTasNet/09/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- DPRNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/09/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/03_DPRNN/09/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVConvTasNet -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/09/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/04_AVConvTasNet/09/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- LAVSE -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/09/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/05_LAVSE/09/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- L2L -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/09/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/06_L2L/09/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- A-FRCNN -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/09/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/07_A-FRCNN-8/09/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+							<td style="width: 180px;">
+								<!-- AVLIT -->
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/09/s1.wav" type="audio/wav">
+								</audio>
+
+
+								<!-- Audio examples -->
+
+								<audio controls="" class="audio-player" preload="metadata"
+									style="width: 180px; margin-bottom: 10px;">
+									<source src="./samples/08_AVLIT-8/09/s2.wav" type="audio/wav">
+								</audio>
+
+
+							</td>
+
+
+
+
+
+
+						</tr>
+
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+		<hr>
+		<div class="row" id="ref">
+			<div class="col">
+				<h2>References</h2>
+				<div>
+					<p>
+						<a name="1">[1]</a>
+						Triantafyllos Afouras, Joon Son Chung, and Andrew Zisserman. “LRS3-TED: a large-scale dataset
+						for visual speech recognition”. In: arXiv preprint arXiv:1809.00496 (2018).
+					</p>
+					<p>
+						<a name="2">[2]</a>
+						Gordon Wichern et al. “WHAM!: Extending speech separation to noisy environments”. In:arXiv
+						preprint arXiv:1907.01160 (2019).
+					</p>
+
+
+
+
+
+
+					<p>
+						<a name="3">[3]</a>
+						Luo Y, Mesgarani N. Conv-tasnet: Surpassing ideal time–frequency magnitude masking for speech
+						separation[J]. IEEE/ACM transactions on audio, speech, and language processing, 2019, 27(8):
+						1256-1266.
+					</p>
+
+
+
+					<p>
+						<a name="4">[4]</a>
+						Yi Luo, Zhuo Chen, and Takuya Yoshioka. “Dual-path rnn: efficient long sequence modeling for
+						time-domain single-channel speech separation”. In: ICASSP 2020-2020 IEEE International
+						Conference on Acoustics, Speech and Signal Processing (ICASSP). IEEE. 2020, pp. 46–50.
+					</p>
+
+
+
+					<p>
+						<a name="5">[5]</a>
+						Jian Wu et al. “Time domain audio visual speech separation”. In: 2019 IEEE automatic speech
+						recognition and understanding workshop (ASRU). IEEE. 2019, pp. 667–673.
+					</p>
+
+
+
+					<p>
+						<a name="6">[6]</a>
+						Shang-Yi Chuang et al. “Lite Audio-Visual Speech Enhancement”. In: Proc. Interspeech 2020. 2020,
+						pp. 1131–1135. DOI: 10 . 21437 / Interspeech . 2020 - 1617. URL:
+						http://dx.doi.org/10.21437/Interspeech.2020-1617.
+					</p>
+
+
+
+					<p>
+						<a name="7">[7]</a>
+						Ariel Ephrat et al. “Looking to listen at the cocktail party: A speaker-independent audio-visual
+						model for speech separation”. In: arXiv preprint arXiv:1804.03619 (2018).
+					</p>
+
+
+
+					<p>
+						<a name="8">[8]</a>
+						Xiaolin Hu et al. “Speech Separation Using an Asynchronous Fully Recurrent Convolutional Neural
+						Network”. In: Thirty-Fifth Conference on Neural Information Processing Systems. 2021. URL:
+						https://openreview.net/forum?id=SlxH2AbBBC2.
+					</p>
+
+
+
+
+				</div>
+			</div>
+		</div>
+		<hr>
+
+	</div>
+</body>
+
+</html>
+</body>
+
+</html>
